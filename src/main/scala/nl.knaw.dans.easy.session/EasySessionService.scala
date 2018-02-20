@@ -18,7 +18,6 @@ package nl.knaw.dans.easy.session
 import javax.servlet.ServletContext
 
 import nl.knaw.dans.lib.logging.DebugEnhancedLogging
-import org.eclipse.jetty.ajp.Ajp13SocketConnector
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.ServletContextHandler
 import org.scalatra._
@@ -27,6 +26,7 @@ import org.scalatra.servlet.ScalatraListener
 import scala.util.Try
 
 class EasySessionService(serverPort: Int, app: EasySessionApp) extends DebugEnhancedLogging {
+
   import logger._
 
   private val server = new Server(serverPort)
@@ -35,13 +35,14 @@ class EasySessionService(serverPort: Int, app: EasySessionApp) extends DebugEnha
     override def probeForCycleClass(classLoader: ClassLoader): (String, LifeCycle) = {
       ("anonymous", new LifeCycle {
         override def init(context: ServletContext): Unit = {
-          context.mount(new EasySessionServlet(app), "/")
+          context.mount(new ProtectedServlet(app), "/*")
+          context.mount(new LoginServlet(app), "/sessions/*")
         }
       })
     }
   })
   server.setHandler(context)
-  info(s"HTTP port is ${serverPort}")
+  info(s"HTTP port is $serverPort")
 
   def start(): Try[Unit] = Try {
     info("Starting service...")

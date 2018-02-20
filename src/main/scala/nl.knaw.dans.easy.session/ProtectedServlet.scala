@@ -15,15 +15,22 @@
  */
 package nl.knaw.dans.easy.session
 
+import nl.knaw.dans.easy.session.components.{ AuthenticationProvider, AuthenticationSupport }
 import nl.knaw.dans.lib.logging.DebugEnhancedLogging
 import org.scalatra._
 
-class EasySessionServlet(app: EasySessionApp) extends ScalatraServlet with DebugEnhancedLogging {
-  import app._
-  import logger._
+class ProtectedServlet(app: EasySessionApp) extends ScalatraServlet
+  with AuthenticationSupport
+  with DebugEnhancedLogging {
+
+  before() {
+    requireLogin()
+  }
 
   get("/") {
     contentType = "text/plain"
-    Ok("EASY Session Service running...")
+    Ok("You are logged in")
   }
+
+  override def getAuthenticationProvider: AuthenticationProvider = app.getAuthenticationProvider
 }

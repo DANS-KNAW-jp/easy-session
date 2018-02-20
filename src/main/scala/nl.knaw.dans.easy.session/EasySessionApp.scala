@@ -15,10 +15,13 @@
  */
 package nl.knaw.dans.easy.session
 
-import scala.util.{ Try, Success }
+import nl.knaw.dans.easy.session.components.AuthenticationProvider
+
+import scala.util.{ Success, Try }
 
 class EasySessionApp(wiring: ApplicationWiring) extends AutoCloseable {
 
+  def getAuthenticationProvider: AuthenticationProvider = wiring.authentication
 
   // The application's API here. This is what is used by driver or entry-point objects.
 
