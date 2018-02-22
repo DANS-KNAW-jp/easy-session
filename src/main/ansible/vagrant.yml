@@ -17,7 +17,7 @@
 - hosts: "test"
   become: yes
   vars:
-    local_test_vm_base_backend_port: 20160
+    local_test_vm_base_backend_port: 20190
   roles:
     - dans.local-test-vm-base
     - dans.local-yum-repo
@@ -35,13 +35,13 @@
       name: dans.knaw.nl-easy-session
       state: latest
 
-    - name: Install Ldap
-      include_role:
-        name: "dans.easy-ldap-dir"
+  - name: Install Ldap
+    include_role:
+      name: "dans.easy-ldap-dir"
 
-    - name: Install easy users
-      include_role:
-        name: "dans.easy-test-users"
+  - name: Install easy users
+    include_role:
+      name: "dans.easy-test-users"
 
   - service:
       name: easy-session

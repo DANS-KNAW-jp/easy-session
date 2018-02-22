@@ -29,7 +29,7 @@ class ProtectedServlet(app: EasySessionApp) extends ScalatraServlet
 
   get("/") {
     contentType = "text/plain"
-    Ok("You are logged in")
+    Ok("You executed a protected action")
   }
 
   override def getAuthenticationProvider: AuthenticationProvider = app.getAuthenticationProvider
